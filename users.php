@@ -49,5 +49,12 @@
                     echo json_encode(["success" => false, "data" => $ex->getMessage()]);
                 }
                 break;
+            case 'validate':
+                try {
+                    echo json_encode(["success" => true, "is_double"=>$users->is_double($_POST['username'])]);
+                } catch (Exception $ex) {
+                    echo json_encode(["success" => false, "data" => $ex->getMessage()]);
+                }
+                break;
         }
     }

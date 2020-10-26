@@ -24,13 +24,14 @@ class appUsers extends appModel
      */
     public function getAllUsers()
     {
-        $sql = "SELECT * from users";
+        $sql = "SELECT u.*, g.name as group_name FROM users u
+                LEFT JOIN groups g ON g.id = u.group_id
+                ORDER BY u.id";
 
         $stmt = $this->conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $stmt->execute(array());
 
-        $arr = $stmt->fetchALL(PDO::FETCH_ASSOC);
-        return $arr;
+        return $stmt->fetchALL(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -68,9 +69,7 @@ class appUsers extends appModel
             ":id" => $id
         ));
 
-        $arr = $stmt->fetch(PDO::FETCH_ASSOC);
-        $arr = array_diff_key($arr, array_flip(array("password", "enabled")));
-        return $arr;
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -105,7 +104,25 @@ class appUsers extends appModel
 
         $stmt = $this->conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $stmt->execute(array(
-            ":id"            => (int)$arr["id"]
+            ":id" => (int)$arr["id"]
         ));
+    }
+
+    /**
+     * Валидация пользователя на дублирование
+     *
+     * @param $username
+     * @return string
+     */
+
+    function is_double($username) {
+        $sql = "SELECT CASE WHEN (SELECT EXISTS(SELECT 1 FROM users WHERE username = :username)) THEN 'double' ELSE 'unic' END is_double";
+
+        $stmt = $this->conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $stmt->execute(array(
+            ":username" => $username
+        ));
+
+        return $stmt->fetch(PDO::FETCH_ASSOC)['is_double'];
     }
 }
