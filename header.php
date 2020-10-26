@@ -4,6 +4,9 @@
 
     use App\appRights;
     $rights = new appRights($conn);
+    Mustache_Autoloader::register();
+    $loader = new Mustache_Loader_FilesystemLoader("templates",array('extension'=>'.html'));
+    $m = new Mustache_Engine;
 ?>
 
 <!DOCTYPE html>

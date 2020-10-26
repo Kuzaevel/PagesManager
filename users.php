@@ -6,23 +6,11 @@
     $users = new appUsers();
 
     if($_SERVER['REQUEST_METHOD']=='GET') {
-        $data = $users->getAllUsers();
+        $data["users"] = $users->getAllUsers();
     }
+
+    echo $m->render($loader->load('users'), $data);
 ?>
-<!-- Page Content -->
-<div class="container">
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <ul>
-            <?php
-                foreach ($data as $user) {
-                    echo "<li>".$user["username"]."</li>";
-                }
-            ?>
-            </ul>
-        </div>
-    </div>
-</div>
 
 <?php
     require_once './footer.php';
