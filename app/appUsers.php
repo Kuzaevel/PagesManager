@@ -53,4 +53,59 @@ class appUsers extends appModel
 
         return $this->conn->lastInsertId();
     }
+
+    /**
+     * Получаем все поля указанного пользователя gpp
+     *
+     * @param $id
+     * @return array
+     */
+    function getUser($id) {
+        $sql = "SELECT * FROM users WHERE id= :id ";
+
+        $stmt = $this->conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $stmt->execute(array(
+            ":id" => $id
+        ));
+
+        $arr = $stmt->fetch(PDO::FETCH_ASSOC);
+        $arr = array_diff_key($arr, array_flip(array("password", "enabled")));
+        return $arr;
+    }
+
+    /**
+     * Редактирвоание пользователя
+     * Передаем массивом все редактируемые поля, кроме пароля
+     *
+     * @param $arr
+     */
+    function edit($arr) {
+        $sql = "UPDATE users SET 
+                username = :username, 
+                contact_name = :contact_name, 
+                group_id = :group_id
+                WHERE id = :id ";
+
+        $stmt = $this->conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $stmt->execute(array(
+            ":username"      => $arr["username"],
+            ":contact_name"  =>$arr["contact_name"],
+            ":group_id"      => (int)$arr["group_id"],
+            ":id"            => (int)$arr["id"]
+        ));
+    }
+
+    /**
+     * Удаление пользователя
+     *
+     * @param $arr
+     */
+    function delete($arr) {
+        $sql = "DELETE FROM users WHERE id=:id;";
+
+        $stmt = $this->conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $stmt->execute(array(
+            ":id"            => (int)$arr["id"]
+        ));
+    }
 }

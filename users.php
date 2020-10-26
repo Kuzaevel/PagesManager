@@ -26,5 +26,28 @@
                     echo json_encode(["success" => false, "data" => $ex->getMessage()]);
                 }
                 break;
+            case 'getUser':
+                try {
+                    echo json_encode(["success" => true, "user" => $users->getUser($_POST["id"])]);
+                } catch (Exception $ex) {
+                    echo json_encode(["success" => false, "error" => $ex->getMessage()]);
+                }
+                break;
+            case 'edit':
+                try {
+                    $users->edit($_POST);
+                    echo json_encode(["success" => true]);
+                } catch (Exception $ex) {
+                    echo json_encode(["success" => false, "data" => $ex->getMessage()]);
+                }
+                break;
+            case 'delete':
+                try {
+                    $users->delete($_POST);
+                    echo json_encode(["success" => true]);
+                } catch (Exception $ex) {
+                    echo json_encode(["success" => false, "data" => $ex->getMessage()]);
+                }
+                break;
         }
     }

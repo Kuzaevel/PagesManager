@@ -18,6 +18,7 @@
                         <th scope="col">Пользователь</th>
                         <th scope="col">Фио</th>
                         <th scope="col">Группа</th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -27,6 +28,7 @@
                         <td>{{username}}</td>
                         <td>{{contact_name}}</td>
                         <td>Тестовая группа</td>
+                        <td><button class="btn btn-primary btn-ship removeUser"  data-user_id="{{id}}">Удалить</button></td>
                     </tr>
                     {{/users}}
                     </tbody>
@@ -51,7 +53,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="addForm" style="margin-left: 30px">
+                <form id="editForm" style="margin-left: 30px">
 
                     <div class="form-group row" style="line-height: 2">
                         <div class="col-sm-3 col-sm-offset-1">
@@ -86,7 +88,6 @@
                         </div>
                     </div>
 
-
                     <div class="form-group row" style="line-height: 2">
                         <div class="col-sm-3 col-sm-offset-1">
                             <label for="contact_mail" required="false">Contact mail:</label>
@@ -107,7 +108,7 @@
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-                <button type="submit" form="addForm" class="btn btn-primary button-save" data-type="change">Сохранить</button>
+                <button type="submit" form="editForm" class="btn btn-primary button-save" data-type="change">Сохранить</button>
             </div>
 
         </div>
