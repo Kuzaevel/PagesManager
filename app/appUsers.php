@@ -32,4 +32,25 @@ class appUsers extends appModel
         $arr = $stmt->fetchALL(PDO::FETCH_ASSOC);
         return $arr;
     }
+
+    /**
+     * Добавляем нового пользователя gpp, (без пароля)
+     *
+     * @param $arr
+     * @return lastInsertId
+     */
+    function addUser($arr) {
+        $sql = "INSERT INTO users (username,enabled,contact_mail,contact_name,group_id ) 
+                VALUES(:username,1,:contact_mail,:contact_name,:group_id)";
+
+        $stmt = $this->conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $stmt->execute(array(
+            ":username"      => $arr["username"],
+            ":contact_name"  => $arr["contact_name"],
+            ":contact_mail"  => $arr["contact_mail"],
+            ":group_id"      => (int)$arr["group_id"]
+        ));
+
+        return $this->conn->lastInsertId();
+    }
 }
