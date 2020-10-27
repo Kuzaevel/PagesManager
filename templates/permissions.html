@@ -1,0 +1,52 @@
+<div class="col-lg-12">
+    <div style="padding-left:20px">
+        <span class="permission-file" style="color:#00ff00;cursor:pointer;">
+            <b>{{{object_name}}}</b>
+        </span>
+        <br>
+        <div class="permission-page" style="padding-left: 35px; margin-top: 10px; padding-top: 10px; border-top: 2px solid grey;">
+            <div class="permission-table" style="margin-bottom: 10px;">
+                <p class="permission-notify"  style="color:green;display: none"  >Элемент</p>
+                {{^object_id}}
+                <button type="button" class="button-add_page" data-name="{{object_name}}">
+                    Добавить страницу в базу
+                </button>
+                {{/object_id}}
+
+                {{#input}}
+                <div style="display: inline-block;" class="permission-remove_block" data-id="{{object_id}}"><i class="fa fa-times-circle-o" style="color: red; cursor: pointer; font-size: 19px;"></i></div>
+                <input value="{{input_text}}" disabled>
+                {{/input}}
+
+                <select class="select-groups" {{^object_id}}style="display:none"{{/object_id}} data-id="{{object_id}}" >
+                <option value="0">Choose group</option>
+                {{#groups}}
+                <option value="{{id}}">{{group_name}}</option>
+                {{/groups}}
+                </select>
+
+                <select class="select-access" {{^object_id}}style="display:none"{{/object_id}} >
+                <option value="0">Choose permission</option>
+                {{#accesses}}
+                <option value="{{id}}">{{access_desc}}</option>
+                {{/accesses}}
+                </select>
+
+                <button class="button-add_permission button-permission"    {{^object_id}}style="display:none"{{/object_id}} data-id="{{object_id}}" data-action="addPermission">
+                Add
+                </button>
+                <button class="button-remove_permission button-permission" {{^object_id}}style="display:none"{{/object_id}} data-id="{{object_id}}" data-action="removePermission">
+                Remove
+                </button>
+
+                <span class="list-permission_button" style="background-color: #008CBA; padding: 4px 7px; cursor: pointer; {{^object_id}}display:none;{{/object_id}}" data-id="{{object_id}}">
+                    Списко прав
+                </span>
+
+                <div class="list-permission" style="display:none;"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -2,6 +2,10 @@
     ob_start();
     require_once 'header.php';
 
+    // объект $right(права) подтягиваются из header.php
+    $rights->setCurrentFileName(basename(__FILE__));
+    echo $rights->checkPermission();
+
     use App\appUsers;
     $users = new appUsers();
 
