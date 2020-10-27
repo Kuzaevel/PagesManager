@@ -25,6 +25,13 @@
   <!-- Bootstrap core CSS -->
   <link href="vendor/twbs/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
+  <style>
+      .error {
+          font-size: 13px;
+          white-space: nowrap;
+          color: red;
+      }
+  </style>
 </head>
 
 <body>

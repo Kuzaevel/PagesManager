@@ -2,40 +2,40 @@ $(document).ready(function(){
 
     $('.table-users tr').dblclick(function(){
         $('#myModalChange').data('user_id', $(this).data('user_id'));
-        $('#myModalChange').data('type', 'change');
-        $('#password_block').hide();
+        $("#editForm input").val("");
+        $('.err_form:not(input)').remove();
         $('#myModalChange').modal('show');
     });
 
-    $('#addUser').click(function(){
-        $('#password_block').show();
-        $('#myModalChange').modal('show');
+    // $('#addUser').click(function(){
+    //     $('#myModalAdd').modal('show');
+    // });
+
+    $('#myModalAdd').on('show.bs.modal',function(){
+        $("#addForm input").val("");
     });
 
     $('#myModalChange').on('show.bs.modal',function(){
         $("#editForm input").val("");
-        if($('#myModalChange').data('type')=='change') {
-            $('#password_block').hide();
-            $.post('', {
-                "action" : "getUser",
-                "id": $(this).data('user_id')
-            }, function (data) {
-                if (data) {
-                    var data = $.parseJSON(data);
-                    if(data['success']) {
-                        var user = data["user"];
-                        for(key in user) {
-                            var el = "[name="+key+"]";
-                            $(el).val(user[key]);
-                            $(el).data('default', user[key])
-                        }
-                    } else {
-                        alert('Ошибка при получении данных пользователя!');
-                        console.log(data['error'])
+        $.post('', {
+            "action" : "getUser",
+            "id": $(this).data('user_id')
+        }, function (data) {
+            if (data) {
+                var data = $.parseJSON(data);
+                if(data['success']) {
+                    var user = data["user"];
+                    for(key in user) {
+                        var el = "[name="+key+"]";
+                        $(el).val(user[key]);
+                        $(el).data('default', user[key])
                     }
+                } else {
+                    alert('Ошибка при получении данных пользователя!');
+                    console.log(data['error'])
                 }
-            });
-        }
+            }
+        });
     });
 
     $('#editForm').submit(function (e) {
@@ -44,37 +44,40 @@ $(document).ready(function(){
         if (!$(this).valid()) {
             return false;
         }
+        var user_id = $('#myModalChange').data('user_id');
+        var out = "action=edit&id=" + user_id + "&" + $('#editForm').serialize();
 
-        if ($('#myModalChange').data('type') == 'change') {
-            var user_id = $('#myModalChange').data('user_id');
-            var out = "action=edit&id=" + user_id + "&" + $('#editForm').serialize();
+        $.post('', out, function (data) {
+            if (data) {
+                var data = $.parseJSON(data);
+                if (data['success']) {
+                    alert('Данные пользователя сохранены!');
+                    location.reload();
+                } else {
+                    alert('Данные не сохранены, проверьте правильность заполнения всех полей!');
+                    console.log(data['error'])
+                }
+            }
+        });
+    });
 
-            $.post('', out, function (data) {
-                if (data) {
-                    var data = $.parseJSON(data);
-                    if (data['success']) {
-                        alert('Данные пользователя сохранены!');
-                        location.reload();
-                    } else {
-                        alert('Данные не сохранены, проверьте правильность заполнения всех полей!');
-                        console.log(data['error'])
-                    }
-                }
-            });
-        } else {
-            var out = "action=addUser&" + $('#editForm').serialize();
-            $.post('', out, function (data) {
-                if (data) {
-                    var data = $.parseJSON(data);
-                    if (data['success']) {
-                        alert('Новый пользователь добавлен!');
-                         location.reload();
-                    } else {
-                        alert('Данные не сохранены, проверьте правильность заполнения всех полей!');
-                    }
-                }
-            });
+    $('#addForm').submit(function (e) {
+        e.preventDefault();
+        if (!$(this).valid()) {
+            return false;
         }
+        var out = "action=addUser&" + $('#addForm').serialize();
+        $.post('', out, function (data) {
+            if (data) {
+                var data = $.parseJSON(data);
+                if (data['success']) {
+                    alert('Новый пользователь добавлен!');
+                    location.reload();
+                } else {
+                    alert('Данные не сохранены, проверьте правильность заполнения всех полей!');
+                }
+            }
+        });
     });
 
     $('.removeUser').click(function () {
@@ -95,23 +98,77 @@ $(document).ready(function(){
 
     $('#myModalChange').on('hide.bs.modal',function()
     {
-        $('#myModalChange').data('type', '');
         $("#editForm input").val("");
         $("#editForm select").val(-1);
+        $('.err_form:not(input)').remove();
+    });
+
+    $('#myModalAdd').on('hide.bs.modal',function()
+    {
+        $("#addForm input").val("");
+        $("#addForm select").val(-1);
+        $('.err_form:not(input)').remove();
     });
 
     $('#editForm').validate({
+        errorClass:'error err_form',
         lang: 'ru',
         rules: {
             username: {
                 required:true,
-                username_double: true
+                minlength: 4,
+                maxlength: 16,
+            },
+            contact_name: "required",
+            contact_mail: {
+                required: true,
+                email: true
             }
         },
         messages: {
             username: {
+                required: "Это поле обязательно для заполнения"
+            },
+            password: "Это поле обязательно для заполнения",
+            contact_name: "Это поле обязательно для заполнения",
+            contact_mail: {
                 required: "Это поле обязательно для заполнения",
-                username_double: "Данный login уже зарегистрирован"
+                email: "Заполните в формате name@domain.com"
+            }
+        }
+    });
+
+    $('#addForm').validate({
+        errorClass:'error err_form',
+        lang: 'ru',
+        rules: {
+            username: {
+                required:true,
+                username_double: true,
+                minlength: 4,
+                maxlength: 16,
+            },
+            contact_name: "required",
+            contact_mail: {
+                required: true,
+                email: true
+            },
+            password:{
+                required: true,
+                minlength: 6,
+                maxlength: 16
+            },
+        },
+        messages: {
+            username: {
+                required: "Это поле обязательно для заполнения",
+                username_double: "Данный login уже зарегистрирован",
+            },
+            password: "Это поле обязательно для заполнения",
+            contact_name: "Это поле обязательно для заполнения",
+            contact_mail: {
+                required: "Это поле обязательно для заполнения",
+                email: "Заполните в формате name@domain.com"
             }
         }
     });

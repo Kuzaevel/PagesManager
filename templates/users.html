@@ -34,7 +34,7 @@
                     </tbody>
                 </table>
                 <div style="text-align: right">
-                    <button id="addUser"class="btn btn-primary btn-ship">Добавить</button>
+                    <button id="addUser"class="btn btn-primary btn-ship" data-toggle="modal" data-target="#myModalAdd">Добавить</button>
                     <div style="width:100%"></div>
                 </div>
 
@@ -44,7 +44,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="myModalChange" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -53,7 +53,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="editForm" style="margin-left: 30px">
+                <form id="addForm" style="margin-left: 30px">
 
                     <div class="form-group row" style="line-height: 2">
                         <div class="col-sm-3 col-sm-offset-1">
@@ -105,10 +105,70 @@
                             <input type="text" id="contact_mail" class='form-control user-field' name="contact_mail">
                         </div>
                     </div>
+                </form>
+            </div>
 
-                    <div class="form-group row">
-                        <div class="col-sm-8 col-sm-offset-1">
-                            <button id="newPassword" type="button" class="btn btn-primary form-control button-generate" data-type="change" hidden>Отправить новый пароль</button>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                <button type="submit" form="addForm" class="btn btn-primary button-save" data-type="change">Сохранить</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<!-- End Modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="myModalChange" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+
+            <div class="modal-body">
+                <form id="editForm" style="margin-left: 30px">
+
+                    <div class="form-group row" style="line-height: 2">
+                        <div class="col-sm-3 col-sm-offset-1">
+                            <label for="username">login:</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <input id="username" type="text" class="form-control user-field input-userForm" name="username">
+                        </div>
+                    </div>
+
+                    <div class="form-group row" style="line-height: 2">
+                        <div class="col-sm-3 col-sm-offset-1">
+                            <label for="contact_name" required="false">Name:</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <input type="text" id="contact_name" class='form-control user-field' name="contact_name">
+                        </div>
+                    </div>
+
+                    <div class="form-group row" style="line-height: 2">
+                        <div class="col-sm-3 col-sm-offset-1">
+                            <label for="group-list">UserGroup:</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <select id="group-list" class='form-control user-field' name="group_id" val="">
+                                {{#groups}}
+                                <option value='{{id}}' data-previous='{{id}}'>
+                                    {{group_name}}
+                                </option>
+                                {{/groups}}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" style="line-height: 2">
+                        <div class="col-sm-3 col-sm-offset-1">
+                            <label for="contact_mail" required="false">Contact mail:</label>
+                        </div>
+                        <div class="col-sm-5">
+                            <input type="text" id="contact_mail" class='form-control user-field' name="contact_mail">
                         </div>
                     </div>
 
