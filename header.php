@@ -39,18 +39,15 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home
-              <span class="sr-only">(current)</span>
+            <a class="nav-link" href="index.php">Управление доступом
+<!--              <span class="sr-only">(current)</span>-->
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
+            <a class="nav-link" href="users.php">Пользователи</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Services</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
+            <a class="nav-link" href="logout.php">Выход</a>
           </li>
         </ul>
       </div>
