@@ -35,7 +35,7 @@ class appUsers extends appModel
     }
 
     /**
-     * Добавляем нового пользователя gpp, (без пароля)
+     * Добавляем нового пользователя app (без пароля)
      *
      * @param $arr
      * @return lastInsertId
@@ -52,11 +52,13 @@ class appUsers extends appModel
             ":group_id"      => (int)$arr["group_id"]
         ));
 
-        return $this->conn->lastInsertId();
+        $id = $this->conn->lastInsertId();
+        $this->changePassword($id, $arr["password"]);
+        return $id;
     }
 
     /**
-     * Получаем все поля указанного пользователя gpp
+     * Получаем все поля указанного пользователя app
      *
      * @param $id
      * @return array
@@ -124,5 +126,22 @@ class appUsers extends appModel
         ));
 
         return $stmt->fetch(PDO::FETCH_ASSOC)['is_double'];
+    }
+
+    /**
+     * Обновляем пароль пользователя
+     *
+     * @param $id
+     * @param $pass
+     */
+    function changePassword($id, $pass) {
+        $pass = md5($pass."top_secret");
+        $sql = "UPDATE users SET password = :pass WHERE id = :id;";
+
+        $stmt = $this->conn->prepare($sql, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+        $stmt->execute(array(
+            ":pass" => $pass,
+            ":id" => (int)$id
+        ));
     }
 }

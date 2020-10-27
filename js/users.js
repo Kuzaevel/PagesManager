@@ -3,17 +3,19 @@ $(document).ready(function(){
     $('.table-users tr').dblclick(function(){
         $('#myModalChange').data('user_id', $(this).data('user_id'));
         $('#myModalChange').data('type', 'change');
+        $('#password_block').hide();
         $('#myModalChange').modal('show');
     });
 
     $('#addUser').click(function(){
+        $('#password_block').show();
         $('#myModalChange').modal('show');
     });
 
     $('#myModalChange').on('show.bs.modal',function(){
         $("#editForm input").val("");
-
         if($('#myModalChange').data('type')=='change') {
+            $('#password_block').hide();
             $.post('', {
                 "action" : "getUser",
                 "id": $(this).data('user_id')
