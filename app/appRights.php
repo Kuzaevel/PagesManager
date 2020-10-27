@@ -10,6 +10,10 @@ class appRights extends appModel {
     function __construct($conn=null, $file="") {
         self::$connection = $conn;
         parent::__construct();
+
+        if (!isset($_SESSION['user'])) {
+            header("Location: login.php");
+        }
     }
 
     /**
